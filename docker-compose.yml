@@ -1,0 +1,38 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - DOCKER_MODS=linuxserver/mods:universal-package-install
+      - INSTALL_PACKAGES=fonts-noto-cjk-extra
+    volumes:
+      - ./jellyfin:/config
+      - /srv/downloads:/data/downloads
+    ports:
+      - 8096:8096
+      # - 8920:8920 #optional
+      # - 7359:7359/udp #optional
+      # - 1900:1900/udp #optional
+    restart: unless-stopped
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=8082
+    volumes:
+      - ./qbittorrent:/config
+      - /srv/downloads:/downloads
+    ports:
+      - 8082:8082 # 需要与 WEBUI_PORT 端口一致
+      # qbittorrent 的默认监听端口 6881
+      # - 6881:6881
+      # 运行后，在 qbittorrent 的设置里修改监听端口，与下面端口保持一致
+      - 16882:16882
+      - 16882:16882/udp
+    restart: unless-stopped
