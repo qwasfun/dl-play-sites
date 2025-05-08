@@ -36,3 +36,18 @@ services:
       - 16882:16882
       - 16882:16882/udp
     restart: unless-stopped
+
+  alist:
+    image: xhofe/alist:main
+    container_name: alist
+    volumes:
+      - ./alist:/opt/alist/data
+      - /srv:/srv
+    ports:
+      - 5244:5244
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+      - SITE_URL=/alist
+    restart: unless-stopped
